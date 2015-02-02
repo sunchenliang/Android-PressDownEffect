@@ -12,21 +12,54 @@ import android.view.animation.ScaleAnimation;
  */
 public class PressDownTouchListener implements View.OnTouchListener {
 
+    /**
+     * 点击按钮时的收缩动画
+     */
     private ScaleAnimation scaleInAnimation;
+    /**
+     * 松开按钮时的回放动画
+     */
     private ScaleAnimation scaleOutAnimation;
 
+    /**
+     * onClick事件
+     */
     private View.OnClickListener onClickListener;
-
+    /**
+     * onTouch事件
+     */
     private View.OnTouchListener onTouchListener;
 
+    /**
+     * 记录下touch事件类型
+     */
     private int eventAction;
+    /**
+     * 需要添加动画效果的对象引用
+     */
     private View view;
 
-    private final static float NORMAL_SCALE_FACTOR = 1f,
-            PRESSED_SCALE_FACTOR = 0.95f,
-            PIVOT_X_VALUE = 0.5f,
-            PIVOT_Y_VALUE = 0.5f;
+    /**
+     * 正常状态的收缩比例
+     */
+    private final static float NORMAL_SCALE_FACTOR = 1f;
 
+    /**
+     * 点击状态的收缩比例
+     */
+    private final static float PRESSED_SCALE_FACTOR = 0.95f;
+    /**
+     * 收缩锚点X值
+     */
+    private final static float PIVOT_X_VALUE = 0.5f;
+    /**
+     * 收缩锚点Y值
+     */
+    private final static float PIVOT_Y_VALUE = 0.5f;
+
+    /**
+     * 缩放动画播放时间
+     */
     private final static int SCALE_ANIMATION_DURATION_IN_MILLISECOND = 300;
 
 
@@ -55,17 +88,15 @@ public class PressDownTouchListener implements View.OnTouchListener {
 
             @Override
             public void onAnimationStart(Animation animation) {
-
             }
 
             @Override
             public void onAnimationRepeat(Animation animation) {
-
             }
 
             @Override
-            public void onAnimationEnd(Animation animation) {
-                if (eventAction == MotionEvent.ACTION_UP && onClickListener != null) {
+            public void onAnimationEnd(Animation animation) {//等动画播放完了在触发click事件。
+                if (eventAction == MotionEvent.ACTION_UP && onClickListener != null) {//判断当此时的touch事件是ACTION_UP且设置了onClickListener事件时，触发click时间
                     onClickListener.onClick(view);
                 }
             }
@@ -91,16 +122,22 @@ public class PressDownTouchListener implements View.OnTouchListener {
         this.onTouchListener = onTouchListener;
     }
 
+    /**
+     * 重载onTouch时间来播放动画
+     * @param v
+     * @param event
+     * @return
+     */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         eventAction = event.getAction();
-        view.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() { //TODO 如果不设置点击事件，onTouch中，
+            // 除ACTION_DOWN事件外，其余事件不能触发，
+            // 目前还没有研究是什么原因。
             @Override
             public void onClick(View v) {
-
             }
         });
-        Log.d("onTouch", "event = " + event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 view.startAnimation(scaleInAnimation);

@@ -21,13 +21,13 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         TextView textview = (TextView) findViewById(R.id.hello_world);
         PressDownTouchListener pressDownTouchListener = new PressDownTouchListener(textview);
-        pressDownTouchListener.setOnClickListener(new View.OnClickListener() {
+        pressDownTouchListener.setOnClickListener(new View.OnClickListener() {//此处定义点击事件
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "hello world clicked!",Toast.LENGTH_SHORT).show();
             }
         });
-        pressDownTouchListener.setOnTouchListener(new View.OnTouchListener() {
+        pressDownTouchListener.setOnTouchListener(new View.OnTouchListener() {//此处定义touch事件
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 Log.d("touch event", "" + event);
